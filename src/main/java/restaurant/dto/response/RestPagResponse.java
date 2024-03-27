@@ -8,6 +8,6 @@ import java.util.List;
 public record RestPagResponse(
         int page,
         int size,
-        List<ALlRestResponse> responses
+        List<AllRestResponse> responses
 ) {
 }

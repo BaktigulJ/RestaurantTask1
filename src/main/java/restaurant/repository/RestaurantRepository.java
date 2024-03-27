@@ -22,7 +22,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     @Query("select r from Restaurant r join r.categories c where c.id= :catId")
     Restaurant getRestaurantByCatId(Long catId);
 
-    @Query("select r from Restaurant r join r.jobApps j where j.id =:jobId")
+    @Query("select r from Restaurant r join r.jobAdvertisements j where j.id =:jobId")
     Restaurant getRestByAppId(Long jobId);
 
     @Query("select r from Restaurant r join r.menuItems m where m.id =:menuId")

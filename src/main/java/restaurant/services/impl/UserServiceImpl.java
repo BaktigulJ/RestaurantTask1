@@ -1,6 +1,5 @@
 package restaurant.services.impl;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,7 +14,7 @@ import restaurant.dto.request.SignUpRequest;
 import restaurant.dto.request.UpdateRequest;
 import restaurant.dto.response.*;
 import restaurant.model.Cheque;
-import restaurant.model.JobApp;
+import restaurant.model.JobAdvertisement;
 import restaurant.model.Restaurant;
 import restaurant.model.User;
 import restaurant.model.enums.Role;
@@ -113,8 +112,8 @@ public class UserServiceImpl implements UserService {
         if (signUpRequest.role().equals(Role.ADMIN) || signUpRequest.role().equals(Role.DEVELOPER)){
             throw new ForbiddenException("Forbidden 403");
         }
-        JobApp saveApps = jobAppRepo.save(
-                JobApp.builder()
+        JobAdvertisement saveApps = jobAppRepo.save(
+                JobAdvertisement.builder()
                         .firstName(signUpRequest.firstName())
                         .lastName(signUpRequest.lastName())
                         .email(signUpRequest.email())
@@ -192,9 +191,9 @@ public class UserServiceImpl implements UserService {
         User user = currentUserService.adminUser(principal);
         Long restId = user.getRestaurant().getId();
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<JobApp> jobApps = jobAppRepo.findAllByRestaurantId(restId,pageable);
+        Page<JobAdvertisement> jobApps = jobAppRepo.findAllByRestaurantId(restId,pageable);
         List<AllUsersResponse> allUsersResponses = new ArrayList<>();
-        for (JobApp userFound : jobApps.getContent()) {
+        for (JobAdvertisement userFound : jobApps.getContent()) {
             AllUsersResponse allUsersResponse = convertApps(userFound);
             allUsersResponses.add(allUsersResponse);
         }
@@ -326,7 +325,7 @@ public class UserServiceImpl implements UserService {
                 user.getExperience()
         );
     }
-    private AllUsersResponse convertApps(JobApp user) {
+    private AllUsersResponse convertApps(JobAdvertisement user) {
         return new AllUsersResponse(
                 user.getId(), user.getLastName(), user.getFirstName(), user.getDateOfBirth(),
                 user.getEmail(), user.getPhoneNumber(), user.getRole(),

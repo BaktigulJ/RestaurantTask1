@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import restaurant.dto.request.EditRestaurantRequest;
 import restaurant.dto.request.SaveRestaurantRequest;
 import restaurant.dto.response.*;
-import restaurant.model.JobApp;
+import restaurant.model.JobAdvertisement;
 import restaurant.model.MenuItem;
 import restaurant.model.Restaurant;
 import restaurant.model.User;
@@ -89,7 +89,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public SimpleResponse assignUserToRes(Long jobId, Principal principal) {
         User currentUser = currentUserService.adminUser(principal);
-        JobApp jobApp = jobAppRepo.getJobAppById(jobId);
+        JobAdvertisement jobAdvertisement = jobAppRepo.getJobAppById(jobId);
         Restaurant adminRestaurant = currentUser.getRestaurant();
         Restaurant userRestaurant = restaurantRepo.getRestByAppId(jobId);
         currentUserService.checkForbidden(adminRestaurant, userRestaurant);
@@ -101,21 +101,21 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
 
         User user = new User();
-        user.setLastName(jobApp.getLastName());
-        user.setFirstName(jobApp.getFirstName());
-        user.setEmail(jobApp.getEmail());
-        user.setPassword(jobApp.getPassword());
-        user.setDateOfBirth(jobApp.getDateOfBirth());
-        user.setPhoneNumber(jobApp.getPhoneNumber());
-        user.setRole(jobApp.getRole());
-        user.setExperience(jobApp.getExperience());
+        user.setLastName(jobAdvertisement.getLastName());
+        user.setFirstName(jobAdvertisement.getFirstName());
+        user.setEmail(jobAdvertisement.getEmail());
+        user.setPassword(jobAdvertisement.getPassword());
+        user.setDateOfBirth(jobAdvertisement.getDateOfBirth());
+        user.setPhoneNumber(jobAdvertisement.getPhoneNumber());
+        user.setRole(jobAdvertisement.getRole());
+        user.setExperience(jobAdvertisement.getExperience());
         userRepo.save(user);
 
         restaurant.addUser(user);
         user.setRestaurant(restaurant);
         restaurant.setNumberOfEmployees(restaurant.getUsers().size());
 
-        jobAppRepo.delete(jobApp);
+        jobAppRepo.delete(jobAdvertisement);
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)
                 .message("You have been successfully hired")
@@ -210,13 +210,13 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public SimpleResponse rejectionApps(Long jobId, Principal principal) {
-        JobApp jobApp = jobAppRepo.getJobAppById(jobId);
+        JobAdvertisement jobAdvertisement = jobAppRepo.getJobAppById(jobId);
         User user = currentUserService.adminUser(principal);
         Restaurant adminRestaurant = user.getRestaurant();
         Restaurant restaurant = restaurantRepo.getRestByAppId(jobId);
         currentUserService.checkForbidden(adminRestaurant, restaurant);
 
-        jobAppRepo.delete(jobApp);
+        jobAppRepo.delete(jobAdvertisement);
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)
                 .message("Sorry, we won't be able to hire you." +
@@ -224,8 +224,8 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .build();
     }
 
-    private ALlRestResponse convert(Restaurant restaurant) {
-        return new ALlRestResponse(
+    private AllRestResponse convert(Restaurant restaurant) {
+        return new AllRestResponse(
                 restaurant.getId(), restaurant.getName(), restaurant.getLocation(),
                 restaurant.getRestType(),
                 restaurant.getNumberOfEmployees(), restaurant.getService());
@@ -238,14 +238,14 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         if (repoAll.isEmpty()) throw new NotFoundException("Restaurants not found");
 
-        List<ALlRestResponse> aLlRestResponses = repoAll.getContent().stream()
+        List<AllRestResponse> allRestResponse = repoAll.getContent().stream()
                 .map(this::convert)
                 .collect(Collectors.toList());
 
         return RestPagResponse.builder()
                 .page(repoAll.getNumber() + 1)
                 .size(repoAll.getNumberOfElements())
-                .responses(aLlRestResponses)
+                .responses(allRestResponse)
                 .build();
     }
 }

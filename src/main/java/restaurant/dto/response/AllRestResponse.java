@@ -4,7 +4,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import restaurant.model.enums.RestType;
 
-public record ALlRestResponse(
+public record AllRestResponse(
         Long id,
         String name,
         String location,

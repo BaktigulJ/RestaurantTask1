@@ -81,8 +81,8 @@ MenuItemRepository extends JpaRepository<MenuItem, Long> {
     List<MenuItem> getMenuItemsByIds(List<Long> menuIds);
 
     @Query("""
-            select new restaurant.dto.response.MenuItemsResponseForCheque(
-            m.name, m.image, m.price, m.description, m.isVegetarian)
+            select new restaurant.dto.response.MenuItemsResponseForCheque
+            (m.name, m.image, m.price, m.description, m.isVegetarian)
             from MenuItem m where m.id in :menuIds
             """)
     List<MenuItemsResponseForCheque> getConvertToItems(List<Long> menuIds);

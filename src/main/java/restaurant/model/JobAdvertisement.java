@@ -9,13 +9,13 @@ import java.time.LocalDate;
 import static jakarta.persistence.CascadeType.DETACH;
 
 @Entity
-@Table(name = "job_apps")
+@Table(name = "job_advertisements")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobApp {
+public class JobAdvertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "job_seq")
     @SequenceGenerator(name = "job_seq", allocationSize = 1)

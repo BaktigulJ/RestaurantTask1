@@ -33,7 +33,7 @@ public class Restaurant {
     private List<MenuItem> menuItems;
 
     @OneToMany(cascade = {REMOVE}, mappedBy = "restaurant")
-    private List<JobApp> jobApps;
+    private List<JobAdvertisement> jobAdvertisements;
 
     @OneToMany(cascade = {REMOVE}, mappedBy = "restaurant")
     private List<Category> categories;
@@ -48,9 +48,9 @@ public class Restaurant {
         this.menuItems.add(menuItem);
     }
 
-    public void addJobApp(JobApp jobApp){
-        if (this.jobApps == null) this.jobApps = new ArrayList<>();
-        this.jobApps.add(jobApp);
+    public void addJobApp(JobAdvertisement jobAdvertisement){
+        if (this.jobAdvertisements == null) this.jobAdvertisements = new ArrayList<>();
+        this.jobAdvertisements.add(jobAdvertisement);
     }
     public void addCategories(Category category){
         if (this.categories == null) this.categories = new ArrayList<>();
